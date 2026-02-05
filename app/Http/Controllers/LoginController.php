@@ -57,7 +57,7 @@ class LoginController extends Controller
         ]);
 
         if(Login::where('email', $email)->exists()){
-            return redirect()->route('password.reset', ['token' => Password::createToken(Login::where('email', $email)->first()), 'email' => $email])->with('success', 'Password reset link has been sent to your email address.');
+            return redirect()->route('password.reset', ['token' => Password::createToken(Login::where('email', $email)->first()), 'email' => $email]);
         }else{
             return back()->withErrors(['email' => 'Email address not found.']);
         }
