@@ -5,6 +5,7 @@
 
     <form action="{{ route('reset-password.post') }}" method="POST" class="space-y-5">
         @csrf
+        <x-errors />
       <input type="hidden" name="token" value="{{ $token }}">
       <input type="hidden" name="email" value="{{ $email }}">
       <!-- Email -->

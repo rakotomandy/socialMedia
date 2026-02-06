@@ -14,7 +14,7 @@
       @enderror
       <div>
         <label for="email" class="block text-gray-700 font-medium mb-1">Email</label>
-        <input type="email" id="email" name="email" placeholder="you@example.com"
+        <input type="email" id="email" name="email" placeholder="you@example.com" value="{{ old('value') }}"
                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600">
       </div>
 

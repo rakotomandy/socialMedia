@@ -13,10 +13,12 @@ return new class extends Migration
     {
         //
         Schema::create('login', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name');
-            $table->string('email')->unique();
+            $table->string('email');
             $table->string('password');
+            $table->string('photo')->nullable();
+            $table->string('token')->nullable();
             $table->timestamps();
         });
     }
