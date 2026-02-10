@@ -8,14 +8,38 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 
+/**
+ * Controller responsible for authentication flows used by the chat app.
+ *
+ * Responsibilities:
+ * - Handle user signup and validation.
+ * - Authenticate users and manage sessions.
+ * - Handle password reset request flow.
+ * - Perform logout and session invalidation.
+ */
 class LoginController extends Controller
 {
     //
+    /**
+     * Show the login view.
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
     public function index()
     {
         return view('login');
     }
 
+    /**
+     * Handle a registration request and create a new `Login` user.
+     *
+     * Validates the incoming request and creates the user record using
+     * a hashed password. On success redirects to the login page with
+     * a success flash message.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function signup(Request $request)
     {
         $request->validate([
@@ -33,6 +57,17 @@ class LoginController extends Controller
         return redirect()->route('login')->with('success', 'Registration successful. Please login.');
     }
 
+    /**
+     * Authenticate a user against the `login` guard.
+     *
+     * Attempts to authenticate using the provided credentials. If
+     * successful regenerates the session to prevent fixation and
+     * redirects to the `home` route. Otherwise returns back with
+     * an authentication error.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function login(Request $request)
     {
         $request->validate([
@@ -49,6 +84,17 @@ class LoginController extends Controller
         ]);
     }
 
+    /**
+     * Initiate a password reset flow for the given email.
+     *
+     * Validates the email exists in the `login` table and generates a
+     * password reset token. Redirects to the reset form route with the
+     * token and email as parameters. If the email does not exist returns
+     * an error back to the form.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function forgotPassword(Request $request)
     {
         $email = $request->email;
@@ -63,6 +109,20 @@ class LoginController extends Controller
         }
     }
 
+    /**
+     * Reset a user's password using a valid token and email.
+     *
+     * Validates token, email and the new password confirmation. Updates
+     * the stored password (hashed) and redirects to login with a success
+     * message.
+     *
+     * Note: This implementation assumes token validation is handled by
+     * the `Password::createToken`/reset workflow elsewhere; adjust as
+     * needed for stricter verification.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function resetPassword(Request $request)
     {
         $request->validate([
@@ -77,6 +137,15 @@ class LoginController extends Controller
         return redirect()->route('login')->with('success', 'Password has been reset successfully. Please login with your new password.');
     }
 
+    /**
+     * Log the user out of the `login` guard and invalidate the session.
+     *
+     * Performs guard logout, invalidates the session and regenerates the
+     * CSRF token before redirecting to the login page.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function logout(Request $request)
     {
         Auth::guard('login')->logout();

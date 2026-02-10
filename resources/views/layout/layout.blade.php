@@ -16,7 +16,7 @@
     @endif
     @stack('styles')
 </head>
-<body>
+<body class="flex">
     @yield('content')
     @stack('scripts')
 </body>

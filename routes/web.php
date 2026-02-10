@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\MessageController;
 use Illuminate\Http\Request;
 // Routes for Authentication (Login, Signup)
 Route::get('/', function () {
@@ -39,5 +40,9 @@ Route::middleware(['prevent-back-history', 'auth:login'])->group(function () {
         return view('messageView.home');
     })->name('home');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout'); 
+
+    // Messages (Inertia + React pages)
+    Route::get('/messages', [MessageController::class, 'index'])->name('messages.index');
+    Route::post('/messages', [MessageController::class, 'store'])->name('messages.store');
 });
 
