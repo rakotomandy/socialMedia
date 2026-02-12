@@ -35,14 +35,10 @@ Route::post('/signup', [LoginController::class, 'signup'])->name('signup.post');
 Route::post('/login', [LoginController::class, 'login'])->name('login.post');
 
 // Protected Routes with Middleware after login authentication
-Route::middleware(['prevent-back-history', 'auth:login'])->group(function () {
-    Route::get('/home', function () {
-        return view('messageView.home');
-    })->name('home');
+Route::middleware(['prevent-back-history', 'auth:login'])->group(function () { 
+    Route::get('/home', [LoginController::class, 'home'])->name('home');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout'); 
 
-    // Messages (Inertia + React pages)
-    Route::get('/messages', [MessageController::class, 'index'])->name('messages.index');
-    Route::post('/messages', [MessageController::class, 'store'])->name('messages.store');
+    Route::get('chat/{email}', [MessageController::class, 'chat'])->name('chat');
 });
 

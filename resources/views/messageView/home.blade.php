@@ -3,8 +3,8 @@
 @section('title', 'home')
 
 @section('content')
-<x-sidebar />
-<x-home />
+<x-sidebar :email="$email" :usersLogin="$usersLogin"/>
+<x-home :email="$email" :usersLogin="$usersLogin"/>
 @endsection
 
 @push('scripts')

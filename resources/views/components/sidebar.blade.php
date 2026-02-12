@@ -1,16 +1,5 @@
-{{--
-    Sidebar component (Blade partial)
+@props(['email', 'usersLogin'])
 
-    Purpose:
-    - Renders the application's left navigation pane used across the chat app layout.
-    - Contains a responsive toggle button, search input, and action links (Profile, Settings, Logout).
-
-    Behaviour notes:
-    - `#toggleButton` is targeted by front-end JS to expand/collapse the sidebar width.
-    - The search `input` is purely presentational here; wire up event handlers in `resources/js/app.js` when needed.
-    - Tooltips shown on the right are implemented via CSS utility classes; they are non-interactive (pointer-events-none).
-    - Use Blade comments (this block) to avoid rendering documentation in HTML output.
---}}
 <aside class="flex flex-col w-fit h-screen gap-3 bg-blue-100 shadow-md p-2 transition-[width] duration-300">
     <div class="flex items-center justify-between">
         <h1 class="label font-bold text-xl">CHAT APP</h1>
@@ -21,8 +10,24 @@
     <hr>
     <div class="flex-1">
         <input class="bg-white p-2 rounded-md outline-none w-full focus:ring-2 focus:ring-blue-400" type="text" placeholder="search">
+        <div class="flex flex-col gap-2 mt-2">
+            @foreach ($usersLogin as $user)
+                <a href="{{ route('chat',["email"=>$user->email,]) }}" class="group relative flex items-center gap-3 p-2 rounded-md
+                      hover:bg-blue-500 hover:text-white transition">
+                    <i class="fa-solid fa-user"></i>
+                    <span class="label">{{ strtoupper($user->name) }}</span>
+
+                    <span class="absolute left-full ml-3 px-2 py-1 text-sm rounded-md
+                           bg-gray-900 text-white opacity-0
+                           group-hover:opacity-100 transition
+                           whitespace-nowrap pointer-events-none">
+                        {{ $user->email }}
+                    </span>
+                </a>
+            @endforeach
+        </div>
     </div>
-    <hr class="h-2 shadow-sm">
+    
     <div class="flex flex-col gap-4">
 
             {{-- Profile link

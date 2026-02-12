@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Login;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Illuminate\View\View;
 
 /**
  * Controller responsible for authentication flows used by the chat app.
@@ -66,23 +68,36 @@ class LoginController extends Controller
      * an authentication error.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Contracts\View\View|RedirectResponse
      */
-    public function login(Request $request)
+    public function login(Request $request): RedirectResponse|View
     {
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
-       if(Auth::guard('login')->attempt($request->only('email', 'password'))){
+        if (Auth::guard('login')->attempt($request->only('email', 'password'))) {
+
+            // Regenerate session to prevent fixation attack
             $request->session()->regenerate();
+
+            // Redirect to the home route
             return redirect()->route('home');
-       }
-       return back()->withErrors([
+        }
+
+        return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ]);
     }
+
+    public function home()
+    {
+        $email = auth()->guard('login')->user()->email;
+        $usersLogin = Login::all();
+        return view('messageView.home', compact('email', 'usersLogin'));
+    }
+
 
     /**
      * Initiate a password reset flow for the given email.
@@ -98,13 +113,13 @@ class LoginController extends Controller
     public function forgotPassword(Request $request)
     {
         $email = $request->email;
-        $request->validate([    
+        $request->validate([
             'email' => 'required|email|exists:login,email',
         ]);
 
-        if(Login::where('email', $email)->exists()){
+        if (Login::where('email', $email)->exists()) {
             return redirect()->route('password.reset', ['token' => Password::createToken(Login::where('email', $email)->first()), 'email' => $email]);
-        }else{
+        } else {
             return back()->withErrors(['email' => 'Email address not found.']);
         }
     }

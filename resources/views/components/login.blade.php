@@ -1,4 +1,4 @@
-<div class="bg-gray-100 flex items-center justify-center min-h-screen">
+<div class="bg-gray-100 flex-1 flex items-center justify-center min-h-screen">
 
   <div class="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md">
     <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Login to Your Account</h2>
