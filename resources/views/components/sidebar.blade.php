@@ -12,7 +12,7 @@
         <input class="bg-white p-2 rounded-md outline-none w-full focus:ring-2 focus:ring-blue-400" type="text" placeholder="search">
         <div class="flex flex-col gap-2 mt-2">
             @foreach ($usersLogin as $user)
-                <a href="{{ route('chat',["email"=>$user->email,]) }}" class="group relative flex items-center gap-3 p-2 rounded-md
+                <a href="{{ route('chat',["id"=>$user->id,]) }}" class="group relative flex items-center gap-3 p-2 rounded-md
                       hover:bg-blue-500 hover:text-white transition">
                     <i class="fa-solid fa-user"></i>
                     <span class="label">{{ strtoupper($user->name) }}</span>

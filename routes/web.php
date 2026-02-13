@@ -39,6 +39,7 @@ Route::middleware(['prevent-back-history', 'auth:login'])->group(function () {
     Route::get('/home', [LoginController::class, 'home'])->name('home');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout'); 
 
-    Route::get('chat/{email}', [MessageController::class, 'chat'])->name('chat');
+    Route::get('chat/{id}', [MessageController::class, 'index'])->name('chat');
+    Route::post('/message', [MessageController::class, 'sendMessage'])->name('sendMessage');
 });
 
